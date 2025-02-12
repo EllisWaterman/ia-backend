@@ -1,0 +1,126 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  StudentScoresTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: StudentScores
+      AttributeDefinitions:
+        - AttributeName: teacherName
+          AttributeType: S
+        - AttributeName: studentName#timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: teacherName
+          KeyType: HASH
+        - AttributeName: studentName#timestamp
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+
+  StudentPreferencesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: StudentPreferences
+      AttributeDefinitions:
+        - AttributeName: studentName
+          AttributeType: S
+      KeySchema:
+        - AttributeName: studentName
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  PostStudentResults:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: post_results.lambda_handler
+      Runtime: python3.13
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: StudentScores
+      Environment:
+        Variables:
+          TABLE_NAME: StudentScores
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /results
+            Method: POST
+
+  GetStudentsByTeacher:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_students.lambda_handler
+      Runtime: python3.13
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: StudentScores
+      Environment:
+        Variables:
+          TABLE_NAME: StudentScores
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /teacher/{teacherName}
+            Method: GET
+
+  GetStudentScores:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_scores.lambda_handler
+      Runtime: python3.13
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: StudentScores
+      Environment:
+        Variables:
+          TABLE_NAME: StudentScores
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /student/{studentName}/scores
+            Method: GET
+
+  SetStudentPreferences:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: set_preferences.lambda_handler
+      Runtime: python3.13
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: StudentPreferences
+      Environment:
+        Variables:
+          TABLE_NAME: StudentPreferences
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /student/{studentName}/preferences
+            Method: POST
+
+  GetStudentPreferences:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_preferences.lambda_handler
+      Runtime: python3.13
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: StudentPreferences
+      Environment:
+        Variables:
+          TABLE_NAME: StudentPreferences
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /student/{studentName}
+            Method: GET
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
