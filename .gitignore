@@ -1,1 +1,3 @@
 /aws-access.txt
+/.aws-sam/build/
+__pycache__

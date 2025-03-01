@@ -33,7 +33,7 @@ Resources:
   PostStudentResults:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: post_results.lambda_handler
+      Handler: main.post_student_results
       Runtime: python3.13
       Policies:
         - DynamoDBCrudPolicy:
