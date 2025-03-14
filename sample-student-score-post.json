@@ -1,11 +1,24 @@
 {
     "studentName": "Ellis Waterman",
-    "teacherName": "Mr. Albinson",
-    "problemSetStartTime": 1740800932,
-    "problemSetEndTime": 1740800962,
-    "numberCorrect": 5,
-    "numberWrong": 5,
-    "operator": "multiplication",
-    "factorUpperBound": 9,
-    "factorLowerBound": 2
+    "teacherName": "Mr. Foobar",
+    "problemSets": [
+        {
+            "problemSetStartTime": 1740800932,
+            "problemSetEndTime": 1740800962,
+            "numberCorrect": 5,
+            "numberWrong": 5,
+            "operator": "multiplication",
+            "factorUpperBound": 9,
+            "factorLowerBound": 2
+        },
+        {
+            "problemSetStartTime": 1740800932,
+            "problemSetEndTime": 1740800962,
+            "numberCorrect": 5,
+            "numberWrong": 5,
+            "operator": "multiplication",
+            "factorUpperBound": 9,
+            "factorLowerBound": 2
+        }
+    ]
 }

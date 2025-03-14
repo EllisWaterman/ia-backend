@@ -5,17 +5,13 @@ Resources:
   StudentScoresTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: StudentScores
+      TableName: StudentScoresV02
       AttributeDefinitions:
-        - AttributeName: teacherName
-          AttributeType: S
-        - AttributeName: studentName#timestamp
+        - AttributeName: studentTeacherHash
           AttributeType: S
       KeySchema:
-        - AttributeName: teacherName
+        - AttributeName: studentTeacherHash
           KeyType: HASH
-        - AttributeName: studentName#timestamp
-          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
   StudentPreferencesTable:
@@ -37,10 +33,10 @@ Resources:
       Runtime: python3.13
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: StudentScores
+            TableName: StudentScoresV02
       Environment:
         Variables:
-          TABLE_NAME: StudentScores
+          TABLE_NAME: StudentScoresV02
       Events:
         Api:
           Type: Api
@@ -55,10 +51,10 @@ Resources:
       Runtime: python3.13
       Policies:
         - DynamoDBReadPolicy:
-            TableName: StudentScores
+            TableName: StudentScoresV02
       Environment:
         Variables:
-          TABLE_NAME: StudentScores
+          TABLE_NAME: StudentScoresV02
       Events:
         Api:
           Type: Api
@@ -73,10 +69,10 @@ Resources:
       Runtime: python3.13
       Policies:
         - DynamoDBReadPolicy:
-            TableName: StudentScores
+            TableName: StudentScoresV02
       Environment:
         Variables:
-          TABLE_NAME: StudentScores
+          TABLE_NAME: StudentScoresV02
       Events:
         Api:
           Type: Api
