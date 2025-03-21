@@ -1,3 +1,5 @@
 /aws-access.txt
 /.aws-sam/build/
 __pycache__
+/package
+/my_deployment_package.zip

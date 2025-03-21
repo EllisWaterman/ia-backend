@@ -29,6 +29,7 @@ Resources:
   PostStudentResults:
     Type: AWS::Serverless::Function
     Properties:
+      PackageType: Zip
       Handler: main.post_student_results
       Runtime: python3.13
       Policies:
@@ -44,28 +45,11 @@ Resources:
             Path: /results
             Method: POST
 
-  GetStudentsByTeacher:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: get_students.lambda_handler
-      Runtime: python3.13
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: StudentScoresV02
-      Environment:
-        Variables:
-          TABLE_NAME: StudentScoresV02
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /teacher/{teacherName}
-            Method: GET
 
   GetStudentScores:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: get_scores.lambda_handler
+      Handler: main.get_scores
       Runtime: python3.13
       Policies:
         - DynamoDBReadPolicy:
@@ -77,7 +61,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /student/{studentName}/scores
+            Path: /student_scores
             Method: GET
 
   SetStudentPreferences:

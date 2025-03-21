@@ -6,6 +6,8 @@ import dominate
 from dominate.tags import *
 from boto3.dynamodb.types import TypeSerializer
 import datetime
+
+import dominate.util
 logger = logging.getLogger(__name__)
 
 class Scores:
@@ -32,6 +34,38 @@ class Scores:
             ConditionExpression="attribute_exists(problemSets.#ps)",  # Ensure the list exists
             ReturnValues="UPDATED_NEW"
         )
+
+    @classmethod
+    def scores_form(self):
+        doc = dominate.document(title=f"Enter Student Info")
+        with doc.head:
+            link(rel='stylesheet', href='style.css')
+            script(type='text/javascript', src='script.js')
+        with doc:
+            with div(id='header'):
+                h1(f"Enter Student Info")
+            with div():
+                attr(cls='body')
+                with form(action = "https://t2ujycl4jf.execute-api.us-east-1.amazonaws.com/Prod/student_scores", method='GET'):
+                    with label(for_="student_name"):
+                        dominate.util.raw("Student Name:")
+                    input_(type="text", id="student_name", name="student_name")
+                    br()
+                    with label(for_="teacher_name"):
+                        dominate.util.raw("Teacher Name:")
+                    input_(type="text", id="teacher_name", name="teacher_name")
+                    br()
+                    with button(type="submit"):
+                        dominate.util.raw("Submit")
+        return(doc)
+
+        # <label for="student_name">Student Name:</label>
+        # <input type="text" id="student_name" name="student_name" required>
+        # <br>
+        # <label for="teacher_name">Teacher Name:</label>
+        # <input type="text" id="teacher_name" name="teacher_name" required>
+        # <br>
+        # <button type="submit">Submit</button>
 
     def html_output(self, item):
         doc = dominate.document(title=f"Results for {self.student}, student of {self.teacher}")
