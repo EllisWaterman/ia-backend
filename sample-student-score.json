@@ -1,0 +1,11 @@
+{
+    "student": "Ellis Waterman",
+    "teacher": "Mr. Foobar",
+    "problemSetStartTime": 1740800932,
+    "problemSetEndTime": 1740800962,
+    "numberCorrect": 6,
+    "numberWrong": 4,
+    "operator": "multiplication",
+    "factorUpperBound": 9,
+    "factorLowerBound": 2
+}
