@@ -108,7 +108,7 @@ class Scores:
         return(doc)
 
     def unixtimeprettytime(self,unix_time):
-        return datetime.datetime.strftime(datetime.datetime.fromtimestamp(int(unix_time)),"%D %I:%m %p")
+        return datetime.datetime.strftime(datetime.datetime.fromtimestamp(int(unix_time)),"%D %I:%M %p")
    
     def get_scores(self):
         m = hashlib.sha1()
