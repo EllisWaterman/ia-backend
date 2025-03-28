@@ -6,7 +6,6 @@ import dominate
 from dominate.tags import *
 from boto3.dynamodb.types import TypeSerializer
 import datetime
-
 import dominate.util
 logger = logging.getLogger(__name__)
 
@@ -18,12 +17,23 @@ class Scores:
         self.table = self.resource.Table(self.table_name)
         self.student = student
         self.teacher = teacher
-    
+
     def send_scores(self, student_scores):
         m = hashlib.sha1()
         m.update(f"{self.student} {self.teacher}".encode("utf-8"))
         key = m.hexdigest()
         serializer = TypeSerializer()
+        new_record = {"studentTeacherHash": key, "studentName": self.student, "teacherName": self.teacher,
+                      "problemSets": {"problemSet": [student_scores]}}
+        try:
+            if self.dynamodb.put_item(
+                TableName=self.table_name,
+                Item=serializer.serialize(new_record)["M"],
+                ConditionExpression="attribute_not_exists(studentTeacherHash)"
+                ):
+                return
+        except:
+            print(f"Record {key} already exists.")
         new_problem_set_dynamodb = {"L": [serializer.serialize(student_scores)]}
         return self.dynamodb.update_item(
             TableName=self.table_name,
@@ -94,7 +104,7 @@ class Scores:
                             td(row['factorUpperBound'])
                             td(row['numberCorrect'])
                             td(row['numberWrong'])
-                            td(row['operator'])
+                            td(row['operatorType'])
         return(doc)
 
     def unixtimeprettytime(self,unix_time):
