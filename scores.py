@@ -47,9 +47,11 @@ class Scores:
 
     @classmethod
     def scores_form(self):
+        style_text = open("style.css").read()
         doc = dominate.document(title=f"Enter Student Info")
         with doc.head:
-            link(rel='stylesheet', href='style.css')
+            with doc.head.add(dominate.tags.style()):
+                dominate.util.raw(style_text)
             script(type='text/javascript', src='script.js')
         with doc:
             with div(id='header'):
@@ -78,9 +80,11 @@ class Scores:
         # <button type="submit">Submit</button>
 
     def html_output(self, item):
+        style_text = open("style.css").read()
         doc = dominate.document(title=f"Results for {self.student}, student of {self.teacher}")
         with doc.head:
-            link(rel='stylesheet', href='style.css')
+            with doc.head.add(dominate.tags.style()):
+                dominate.util.raw(style_text)
             script(type='text/javascript', src='script.js')
         with doc:
             with div(id='header'):
@@ -97,7 +101,7 @@ class Scores:
                         th("Number Wrong")
                         th("Operator")
                     for row in item['problemSets']['problemSet']:
-                        with tr():
+                        with tr(style="green" if row['numberWrong'] == 0 else ""):
                             td(self.unixtimeprettytime(row['problemSetStartTime']))
                             td(self.unixtimeprettytime(row['problemSetEndTime']))
                             td(row['factorLowerBound'])
